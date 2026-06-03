@@ -1,5 +1,6 @@
 package com.deepseek.firstapp.screens.dashboard
 
+import AuthViewModel
 import android.icu.text.CaseMap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -38,10 +39,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,6 +60,8 @@ import com.deepseek.firstapp.navigation.ROUTE_ADDPRODUCT
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(navController: NavHostController){
+    val context= LocalContext.current
+    val myauth=AuthViewModel(navController,context)
     Scaffold(
         //TOP bar
         topBar = {
@@ -71,7 +80,7 @@ fun DashboardScreen(navController: NavHostController){
                            contentDescription = "person icon")
                    }
                    IconButton(onClick = {
-                   //add logout code
+                     myauth.logout()
                         }){
                        Icon(Icons.Default.ExitToApp,
                            contentDescription = " logout icon ")
@@ -135,6 +144,10 @@ fun DashboardScreen(navController: NavHostController){
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            var username by remember { mutableStateOf("loading ...") }
+            LaunchedEffect(Unit) {
+                myauth.getCurrentUserName { username=it }
+            }
             //surface
             Surface(
                 shape = RoundedCornerShape(16.dp),
@@ -144,6 +157,7 @@ fun DashboardScreen(navController: NavHostController){
                     .height(200.dp)
                     .fillMaxWidth()
             ) {
+
                 Image(
                     painter = painterResource(id=R.drawable.banner),
                     contentDescription = "banner",
@@ -152,6 +166,7 @@ fun DashboardScreen(navController: NavHostController){
                 )
             }
             Spacer(modifier = Modifier.height(20.dp) )
+            Text(text="welcome  $username")
             Text("welcome to admin dashboard",
                 color = Color(0xFF2E7D32),
                 style = MaterialTheme.typography.headlineSmall

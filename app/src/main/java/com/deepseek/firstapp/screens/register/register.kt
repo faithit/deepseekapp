@@ -1,6 +1,7 @@
 package com.deepseek.firstapp.screens.register
 
 
+import AuthViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -132,8 +134,10 @@ fun RegisterScreen(navController: NavHostController){
             singleLine = true
         )
         Spacer(modifier = Modifier.height(20.dp))
+        val context= LocalContext.current
+        val myauth=AuthViewModel(navController,context)
         Button(onClick = {
-            //add LOGIC to firebase
+            myauth.signup(fullname,email,password, confirmpassword )
         },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(

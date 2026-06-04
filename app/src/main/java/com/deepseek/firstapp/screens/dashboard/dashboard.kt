@@ -166,7 +166,10 @@ fun DashboardScreen(navController: NavHostController){
                 )
             }
             Spacer(modifier = Modifier.height(20.dp) )
-            Text(text="welcome  $username")
+            Text(text="welcome  $username",
+                color = Color(0xFF2E7D32),
+                style = MaterialTheme.typography.headlineSmall
+                )
             Text("welcome to admin dashboard",
                 color = Color(0xFF2E7D32),
                 style = MaterialTheme.typography.headlineSmall

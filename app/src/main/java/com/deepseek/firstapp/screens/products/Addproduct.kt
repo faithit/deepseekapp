@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +43,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.deepseek.firstapp.R
+import com.deepseek.firstapp.viewmodel.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,8 +127,23 @@ fun AddProductScreen(navController: NavHostController){
                 Text("choose image")
             }
             Spacer(modifier = Modifier.height(20.dp))
+            val context= LocalContext.current
+            val MyProductViewModel= ProductViewModel(navController,context)
             Button(
-                onClick = {},
+                onClick = {
+                    MyProductViewModel.uploadProduct(
+                        imageUri = imageUri,
+                        name = productName,
+                        price =price,
+                        description = description
+                    )
+                    //cear outlined textfields
+                    productName=""
+                    price=""
+                    description=""
+                    imageUri=null
+
+                },
                 modifier = Modifier.fillMaxWidth()
                 ) {
                 Text("ADD PRODUCT")

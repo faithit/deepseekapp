@@ -8,7 +8,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface ClodunaryAPI{
+interface CloudinaryAPI{
     @Multipart
     @POST("v1_1/dojp0mlml/image/upload") //replace dojp0mlml with your cloud name
     suspend fun uploadImage(

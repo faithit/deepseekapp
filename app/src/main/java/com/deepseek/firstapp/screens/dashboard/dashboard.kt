@@ -56,6 +56,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.deepseek.firstapp.R
 import com.deepseek.firstapp.navigation.ROUTE_ADDPRODUCT
+import com.deepseek.firstapp.navigation.ROUTE_PRODUCTLIST
+import com.deepseek.firstapp.navigation.ROUTE_USERPROFILE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -185,7 +187,9 @@ fun DashboardScreen(navController: NavHostController){
                     )
                     DashboardCard(
                         title = "PRODUCTS",
-                        onClick = {}
+                        onClick = {
+                            navController.navigate(ROUTE_PRODUCTLIST)
+                        }
                     )
                 }
             Spacer(modifier = Modifier.height(16.dp))
@@ -199,7 +203,7 @@ fun DashboardScreen(navController: NavHostController){
                 )
                 DashboardCard(
                     title = "PROFILE",
-                    onClick = {}
+                    onClick = {navController.navigate(ROUTE_USERPROFILE)}
                 )
             }
 

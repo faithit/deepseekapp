@@ -31,11 +31,8 @@ import kotlinx.coroutines.delay
 fun SplashScreen(
     navController: NavHostController
 ) {
-
     LaunchedEffect(Unit) {
-
         delay(2000)
-
         navController.navigate(ROUTE_ONBOARDING) {
             popUpTo(0)
             launchSingleTop = true

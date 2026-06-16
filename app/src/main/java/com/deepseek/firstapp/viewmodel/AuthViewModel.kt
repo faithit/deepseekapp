@@ -6,6 +6,7 @@ import com.deepseek.firstapp.models.User
 import com.deepseek.firstapp.navigation.ROUTE_DASHBOARD
 import com.deepseek.firstapp.navigation.ROUTE_LOGIN
 import com.deepseek.firstapp.navigation.ROUTE_REGISTER
+import com.deepseek.firstapp.navigation.ROUTE_USERDASHBOARD
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +30,8 @@ class AuthViewModel(var navController: NavHostController,var context: Context){
                             email,
                             password,
                             mAuth.currentUser!!.uid,
-                            profileImage = "")
+                            profileImage = "",
+                            "user")
                             //save  user in realtime database
                              val regRef= FirebaseDatabase.getInstance().getReference()
                             .child("Users/" + mAuth.currentUser!!.uid)
@@ -61,8 +63,21 @@ class AuthViewModel(var navController: NavHostController,var context: Context){
     fun login(email: String,password: String){
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
             if (it.isSuccessful){
-                Toast.makeText(context,"succefully login in", Toast.LENGTH_LONG).show()
-                navController.navigate(ROUTE_DASHBOARD)
+                val userId=mAuth.currentUser?.uid
+                //fetch user role
+                FirebaseDatabase.getInstance().reference.child("Users")
+                    .child(userId!!).get().addOnSuccessListener { snapshot ->
+                        val role=snapshot.child("role").value.toString()
+                        Toast.makeText(context,"successfully login in", Toast.LENGTH_LONG).show()
+                      //role based  navigation
+                        if (role == "admin"){
+                          navController.navigate(ROUTE_DASHBOARD)
+                      }else{
+                          navController.navigate(ROUTE_USERDASHBOARD)
+                      }
+                    }.addOnFailureListener {
+                        Toast.makeText(context,"failed to retrieve user role", Toast.LENGTH_LONG).show()
+                    }
             }else{
                 Toast.makeText(context,"error logging in", Toast.LENGTH_LONG).show()
             }

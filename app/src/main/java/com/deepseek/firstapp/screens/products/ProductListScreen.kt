@@ -12,12 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -42,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.deepseek.firstapp.models.Product
 import com.deepseek.firstapp.R
+import com.deepseek.firstapp.navigation.ROUTE_ADDPRODUCT
 import com.deepseek.firstapp.navigation.ROUTE_UPDATEPRODUCT
 import com.deepseek.firstapp.viewmodel.ProductViewModel
 
@@ -59,6 +64,18 @@ fun ProductListScreen(navController: NavHostController){
                     containerColor = Color.Green
                 )
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {navController.navigate(ROUTE_ADDPRODUCT)},
+                containerColor = Color.Green
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add product icon",
+                    tint=Color.White
+                )
+            }
         }
     ) {
         innerpadding ->

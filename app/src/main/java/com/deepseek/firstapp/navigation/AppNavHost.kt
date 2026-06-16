@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.deepseek.firstapp.screens.User.UserDashboardScreen
 import com.deepseek.firstapp.screens.dashboard.DashboardScreen
 import com.deepseek.firstapp.screens.login.LoginScreen
 import com.deepseek.firstapp.screens.onboarding.OnboardingScreen
@@ -45,9 +46,6 @@ fun AppNavHost(
         composable(ROUTE_ADDPRODUCT) {
             AddProductScreen(navController)
         }
-        composable(ROUTE_ONBOARDING) {
-            OnboardingScreen(navController)
-        }
         composable(ROUTE_USERPROFILE) {
             ProfileScreen(navController)
         }
@@ -57,7 +55,12 @@ fun AppNavHost(
         composable (ROUTE_UPDATEPRODUCT+ "/{productId}"){backStackEntry ->
             val productId=backStackEntry.arguments?.getString("productId")!!
             UpdateProductScreen(navController,productId)
-
+        }
+        composable (ROUTE_USERDASHBOARD){
+            UserDashboardScreen(navController)
+        }
+        composable(ROUTE_ONBOARDING) {
+            OnboardingScreen(navController)
         }
 
 

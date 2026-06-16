@@ -1,6 +1,6 @@
 package com.deepseek.firstapp.screens.products
 
-import android.R
+
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,10 +38,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.deepseek.firstapp.models.Product
+import com.deepseek.firstapp.navigation.ROUTE_PRODUCTLIST
+import com.deepseek.firstapp.viewmodel.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateProductScreen(navController: NavHostController,productID: String){
+fun UpdateProductScreen(navController: NavHostController,productId: String){
+    val context=LocalContext.current
+    val productviewmodel= ProductViewModel(navController,context)
+
     var productName by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var descriprition by remember { mutableStateOf("") }
@@ -53,8 +60,19 @@ fun UpdateProductScreen(navController: NavHostController,productID: String){
         if (uri !=null) imageUri=uri
     }
     //fetch product data
-    LaunchedEffect(productID) {
-        
+    LaunchedEffect(productId) {
+        productviewmodel.databasareference.child(productId).get()
+            .addOnSuccessListener { snapshot ->
+                val product=snapshot.getValue(Product::class.java)
+                product?.let{
+                   productName=it.name
+                    price=it.price
+                    descriprition=it.description
+                    imageUrl=it.imageUrl
+                }
+            }
+
+
     }
     Scaffold(
         topBar = {
@@ -119,7 +137,14 @@ fun UpdateProductScreen(navController: NavHostController,productID: String){
             Spacer(modifier = Modifier.height(20.dp))
             //UPDATE PRODUCT BUTTON
             Button(onClick = {
-               //UPDATE PRODUCT LOGIC
+               productviewmodel.updateProduct(
+                   productId=productId,
+                   name=productName,
+                   price = price,
+                   description = descriprition,
+                   imageUri=imageUri
+               )
+                navController.navigate(ROUTE_PRODUCTLIST)
             },
                 modifier = Modifier.fillMaxWidth(),
                 colors= ButtonDefaults.buttonColors(
@@ -145,6 +170,6 @@ fun UpdateProductScreen(navController: NavHostController,productID: String){
 @Preview(showBackground = true)
 @Composable
 fun UpdateProductScreenPreview(){
-    UpdateProductScreen(navController = rememberNavController(), productID = "2")
+    UpdateProductScreen(navController = rememberNavController(), productId = "2")
 
 }
